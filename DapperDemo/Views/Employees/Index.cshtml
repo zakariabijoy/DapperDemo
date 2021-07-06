@@ -39,10 +39,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-           
+
             <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-info">Edit</a> 
+                <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-info">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-danger">Delete</a>
             </td>
+            
         </tr>
 }
     </tbody>

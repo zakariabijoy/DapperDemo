@@ -11,60 +11,51 @@ using DapperDemo.Repository;
 
 namespace DapperDemo.Controllers
 {
-    public class CompaniesController : Controller
+    public class EmployeesController : Controller
     {
         private readonly ICompanyRepository _compRepo;
+        private readonly IEmployeeRepository _empRepo;
 
-        public CompaniesController(ICompanyRepository compRepo)
+        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo)
         {
             _compRepo = compRepo;
+            _empRepo = empRepo; 
         }
 
-        // GET: Companies
+
         public async Task<IActionResult> Index()
         {
-            return View( _compRepo.GetAll());
+            return View( _empRepo.GetAll());
         }
 
-        // GET: Companies/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
-            if (company == null)
-            {
-                return NotFound();
-            }
 
-            return View(company);
-        }
-
-        // GET: Companies/Create
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> companyList = _compRepo.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.CompanyId.ToString()
+            });
+            ViewBag.CompanyList = companyList;
             return View();
         }
 
-        // POST: Companies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
+        public async Task<IActionResult> Create( Employee employee)
         {
             if (ModelState.IsValid)
             {
-                _compRepo.Add(company);
+                _empRepo.Add(employee);
                 return RedirectToAction(nameof(Index));
             }
-            return View(company);
+            return View(employee);
         }
 
-        // GET: Companies/Edit/5
+  
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,35 +63,40 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
-            if (company == null)
+            var employee = _empRepo.Find(id.GetValueOrDefault());
+            if (employee == null)
             {
                 return NotFound();
             }
-            return View(company);
+
+            IEnumerable<SelectListItem> companyList = _compRepo.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.CompanyId.ToString()
+            });
+            ViewBag.CompanyList = companyList;
+            return View(employee);
         }
 
-        // POST: Companies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
-            if (id != company.CompanyId)
+            if (id != employee.EmployeeId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _compRepo.Update(company);
+                _empRepo.Update(employee);
                 return RedirectToAction(nameof(Index));
             }
-            return View(company);
+            return View(employee);
         }
 
-        // GET: Companies/Delete/5
+      
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -108,7 +104,7 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-             _compRepo.Remove(id.GetValueOrDefault());
+             _empRepo.Remove(id.GetValueOrDefault());
             return RedirectToAction(nameof(Index));
         }
 
