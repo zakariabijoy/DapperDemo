@@ -15,21 +15,24 @@ namespace DapperDemo.Controllers
     {
         private readonly ICompanyRepository _compRepo;
         private readonly IEmployeeRepository _empRepo;
+        private readonly IBonusRepository _bonRepo;
 
-        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo)
+        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo, IBonusRepository bonRepository)
         {
             _compRepo = compRepo;
-            _empRepo = empRepo; 
+            _empRepo = empRepo;
+            _bonRepo = bonRepository;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            List<Employee> employees = _empRepo.GetAll();
-            foreach (var obj in employees)
-            {
-                obj.Company = _compRepo.Find(obj.CompanyId);
-            }
+            //List<Employee> employees = _empRepo.GetAll();
+            //foreach (var obj in employees)
+            //{
+            //    obj.Company = _compRepo.Find(obj.CompanyId);
+            //}
+            List<Employee> employees = _bonRepo.GetEmployeesWithCompany();
             return View(employees);
         }
 
