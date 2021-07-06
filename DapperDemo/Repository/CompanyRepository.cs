@@ -26,7 +26,8 @@ namespace DapperDemo.Repository
 
         public Company Find(int id)
         {
-          
+            var sql = "SELECT * FROM Companies WHERE CompanyId = @Id";
+            return db.Query<Company>(sql, new { @Id = id }).Single();
         }
 
         public List<Company> GetAll()
