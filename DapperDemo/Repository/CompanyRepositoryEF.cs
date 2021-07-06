@@ -24,7 +24,7 @@ namespace DapperDemo.Repository
 
         public Company Find(int id)
         {
-          return  _context.Companies.Find(id);
+            return _context.Companies.Find(id);
         }
 
         public List<Company> GetAll()
@@ -34,14 +34,14 @@ namespace DapperDemo.Repository
 
         public void Remove(int id)
         {
-          var company =  _context.Companies.Find(id);
+            var company = _context.Companies.Find(id);
             _context.Companies.Remove(company);
             _context.SaveChanges();
         }
 
         public Company Update(Company company)
         {
-             _context.Companies.Update(company);
+            _context.Companies.Update(company);
             _context.SaveChanges();
             return company;
         }
