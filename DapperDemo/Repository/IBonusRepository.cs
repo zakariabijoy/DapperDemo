@@ -8,6 +8,6 @@ namespace DapperDemo.Repository
 {
     public interface IBonusRepository
     {
-        List<Employee> GetEmployeesWithCompany();
+        List<Employee> GetEmployeesWithCompany(int id);
     }
 }
