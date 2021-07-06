@@ -11,24 +11,37 @@ using DapperDemo.Repository;
 
 namespace DapperDemo.Controllers
 {
-    public class EmployeesController : Controller
+    public class CompaniesController : Controller
     {
         private readonly ICompanyRepository _compRepo;
-        private readonly IEmployeeRepository _empRepo;
 
-        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo)
+        public CompaniesController(ICompanyRepository compRepo)
         {
             _compRepo = compRepo;
-            _empRepo = empRepo; 
         }
 
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            return View( _empRepo.GetAll());
+            return View( _compRepo.GetAll());
         }
 
-        
+        // GET: Companies/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var company = _compRepo.Find(id.GetValueOrDefault());
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return View(company);
+        }
 
         // GET: Companies/Create
         public IActionResult Create()
@@ -41,14 +54,14 @@ namespace DapperDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Employee employee)
+        public async Task<IActionResult> Create([Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
         {
             if (ModelState.IsValid)
             {
-                _empRepo.Add(employee);
+                _compRepo.Add(company);
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(company);
         }
 
         // GET: Companies/Edit/5
@@ -59,12 +72,12 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-            var employee = _empRepo.Find(id.GetValueOrDefault());
-            if (employee == null)
+            var company = _compRepo.Find(id.GetValueOrDefault());
+            if (company == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(company);
         }
 
         // POST: Companies/Edit/5
@@ -72,19 +85,19 @@ namespace DapperDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,Name,Address,City,State,PostalCode")] Company company)
         {
-            if (id != employee.EmployeeId)
+            if (id != company.CompanyId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _empRepo.Update(employee);
+                _compRepo.Update(company);
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(company);
         }
 
         // GET: Companies/Delete/5
@@ -95,7 +108,7 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-             _empRepo.Remove(id.GetValueOrDefault());
+             _compRepo.Remove(id.GetValueOrDefault());
             return RedirectToAction(nameof(Index));
         }
 
