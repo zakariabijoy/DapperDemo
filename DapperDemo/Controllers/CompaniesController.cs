@@ -14,10 +14,14 @@ namespace DapperDemo.Controllers
     public class CompaniesController : Controller
     {
         private readonly ICompanyRepository _compRepo;
+        private readonly IBonusRepository _bonRepo;
+        private readonly IEmployeeRepository _empRepo;
 
-        public CompaniesController(ICompanyRepository compRepo)
+        public CompaniesController(ICompanyRepository compRepo, IBonusRepository bonRepo, IEmployeeRepository empRepo)
         {
             _compRepo = compRepo;
+            _bonRepo = bonRepo;
+            _empRepo = empRepo;
         }
 
 
@@ -34,7 +38,7 @@ namespace DapperDemo.Controllers
                 return NotFound();
             }
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
+            var company = _bonRepo.GetCompanyWithEmployees(id.GetValueOrDefault());
             if (company == null)
             {
                 return NotFound();

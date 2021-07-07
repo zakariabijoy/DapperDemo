@@ -9,5 +9,7 @@ namespace DapperDemo.Repository
     public interface IBonusRepository
     {
         List<Employee> GetEmployeesWithCompany(int id);
+
+        Company GetCompanyWithEmployees(int id);
     }
 }
