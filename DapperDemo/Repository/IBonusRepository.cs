@@ -11,5 +11,7 @@ namespace DapperDemo.Repository
         List<Employee> GetEmployeesWithCompany(int id);
 
         Company GetCompanyWithEmployees(int id);
+
+        List<Company> GetAllCompanyWithEmployees();
     }
 }
