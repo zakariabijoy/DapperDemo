@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DapperDemo.Repository
 {
@@ -42,6 +43,37 @@ namespace DapperDemo.Repository
 
             db.Execute(sqlemp, objComp.Employees);
 
+        }
+
+
+        public void AddTestCompanyWithEmployeesWithTransaction(Company objComp)
+        {
+            using var transection = new TransactionScope();
+
+            try
+            {
+                var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);" +
+                                         "SELECT CAST(SCOPE_IDENTITY() as int); ";
+                var id = db.Query<int>(sql, objComp).Single();
+                objComp.CompanyId = id;
+
+
+                objComp.Employees.Select(c => { c.CompanyId = id; return c; }).ToList();
+
+                var sqlemp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
+                             "SELECT CAST(SCOPE_IDENTITY() as int);";
+
+                db.Execute(sqlemp, objComp.Employees);
+
+                transection.Complete();
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+
+            
 
         }
 
