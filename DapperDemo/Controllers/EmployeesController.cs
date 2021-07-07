@@ -57,7 +57,7 @@ namespace DapperDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                _empRepo.Add(employee);
+               await _empRepo.AddAsync(employee);
                 return RedirectToAction(nameof(Index));
             }
             return View(employee);
